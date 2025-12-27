@@ -1,0 +1,74 @@
+2️⃣ study_helper.html (starter page)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrightMind – Study Helper</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>BrightMind – AI Study Helper</h1>
+  <button onclick="logout()">Logout</button>
+</header>
+
+<main>
+  <p id="greeting"></p>
+  <p>Questions left today: <span id="questions-left">15</span></p>
+
+  <textarea id="question" placeholder="Type your question here..."></textarea>
+  <button onclick="askQuestion()">Ask BrightMind</button>
+
+  <div id="answer"></div>
+</main>
+
+<script>
+  // ✅ Firebase Config
+  const firebaseConfig = {
+    apiKey: "AIzaSyD51SmzM1rqUx4LzWv4z3QMp0HaPN5f1ME",
+    authDomain: "brightmind-db22d.firebaseapp.com",
+    projectId: "brightmind-db22d",
+    storageBucket: "brightmind-db22d.appspot.com",
+    messagingSenderId: "946611914956",
+    appId: "1:946611914956:web:27d6fe05ae9b874bcbda69"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  // Redirect if not logged in
+  auth.onAuthStateChanged(user => {
+    if (!user) window.location.href = "login.html";
+    else document.getElementById('greeting').innerText = `Welcome, ${user.email}`;
+  });
+
+  function logout() {
+    auth.signOut().then(() => {
+      window.location.href = "login.html";
+    });
+  }
+
+  // Placeholder for asking AI
+  let questionsLeft = 15;
+  function askQuestion() {
+    const q = document.getElementById('question').value;
+    const ansDiv = document.getElementById('answer');
+    if (!q) return alert("Type a question first!");
+    if (questionsLeft <= 0) return alert("You reached your daily limit!");
+    
+    questionsLeft--;
+    document.getElementById('questions-left').innerText = questionsLeft;
+
+    // Fake response for now
+    ansDiv.innerHTML = `<p><strong>Q:</strong> ${q}</p><p><strong>A:</strong> BrightMind is thinking... (AI response placeholder)</p>`;
+    document.getElementById('question').value = "";
+  }
+</script>
+
+</body>
+</html>
